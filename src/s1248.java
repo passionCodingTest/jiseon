@@ -49,7 +49,7 @@ public class s1248 {
     }
     public static boolean check(int index){
         int sum = 0;
-        for(int i = index;i>=0;i--){ 
+        for(int i = index;i>=0;i--){
             sum += ans[i];
             if (s[i][index] == 0) { //0일때
                 if (sum != 0) return false; //아니면
