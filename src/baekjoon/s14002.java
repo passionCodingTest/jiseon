@@ -14,10 +14,10 @@ public class s14002 {
         Scanner sc = new Scanner(System.in);
 
         n = sc.nextInt();
-        list = new int[n];
-        d = new int[n];
-        v = new int[n];
-        for(int i=0;i<n;i++){
+        list = new int[n+1];
+        d = new int[n+1];
+        v = new int[n+1];
+        for(int i=1;i<=n;i++){
             list[i] = sc.nextInt();
         }
         System.out.println(go(n));
@@ -26,36 +26,34 @@ public class s14002 {
     }
 
     public static int go(int n) {
-        d[0] = 1;
-        for(int i=1;i<n;i++){
+        d[1] = 1;
+        if(n == 1){
+            sb.append(list[n]);
+            return d[n];
+        }
+        int max = 1;
+        int last = 0;
+        for(int i=2;i<=n;i++){
             d[i] = 1;
             v[i] = 0;
-            for(int j=i-1;j>=0;j--){
-                if(list[j] < list[i]){
-                    int temp = d[j] + 1;
-                    if(temp > d[i]){
-                        d[i] = temp;
-                        v[i] = j;
+            for(int j=1;j<i;j++){
+                if(list[j] < list[i] && d[j] >= d[i]){
+                    d[i] = d[j] + 1;
+                    v[i] = j;
+                    if(d[i] > max){
+                        max = d[i];
+                        last = i;
                     }
                 }
             }
         }
 
-        Arrays.sort(d);
-        int index = 0;
-        for(int i=0;i<n;i++){
-            if(d[i] == d[d.length-1]){
-                index = i;
-            }
-        }
-        lis(index);
-
-
-        return d[d.length-1]; //최대값
+        lis(last);
+        return max; //최대값
     }
     public static void lis(int index){
-        if(index == 0) return;
-        sb.append(list[v[index]]+" ");
-        lis(v[v[index]]);
+        if(index ==0) return;
+        lis(v[index]);
+        sb.append(list[index]+" ");
     }
 }

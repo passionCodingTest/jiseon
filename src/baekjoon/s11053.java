@@ -4,7 +4,7 @@ package baekjoon;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class s654 {
+public class s11053 {
     static int n;
     static int[] list;
     static int[] d;
