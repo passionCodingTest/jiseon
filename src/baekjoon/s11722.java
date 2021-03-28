@@ -31,6 +31,7 @@ public class s11722 {
                 }
             }
         }
+
         Arrays.sort(d);
         return d[d.length-1]; //최대값
     }
