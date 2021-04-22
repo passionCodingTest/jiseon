@@ -1,68 +1,84 @@
 package baekjoon;
 
-
-import java.util.Scanner;
-
+import java.util.*;
 public class s14890 {
+    static boolean go(int[] a, int l) {
+        // 한 줄 검사
+        int n = a.length;
+        boolean[] c = new boolean[n];
+        for (int i=1; i<n; i++) {
+            if (a[i-1] != a[i]) {
+                // 인접한 칸의 높이가 다르면, 경사로를 놓아야 한다.
+                int diff = a[i]-a[i-1];
+                if (diff < 0) diff = -diff;
+                if (diff != 1) {
+                // 낮은 칸과 높은 칸의 높이 차이는 1이어야 한다.
+                    return false;
+                }
+                if (a[i-1] < a[i]) {
+                    for (int j=1; j<=l; j++) {
+                        if (i-j < 0) {
+                        // 경사로를 놓다가 범위를 벗어나는 경우
+                            return false;
+                        }
+                        if (a[i-1] != a[i-j]) {
+                        // 낮은 지점의 칸의 높이가 모두 같지 않거나, L개가 연속되지 않은 경우
+                            return false;
+                        }
+                        if (c[i-j]) {
+                        // 경사로를 놓은 곳에 또 경사로를 놓는 경우
+                            return false;
+                        }
+                        c[i-j] = true;
+                    }
+                } else {
+                    // a[i-1] > a[i]
+                    for (int j=0; j<l; j++) {
+                        if (i+j >= n) {
+                        // 경사로를 놓다가 범위를 벗어나는 경우
+                            return false;
+                        }
+                        if (a[i] != a[i+j]) {
+                        // 낮은 지점의 칸의 높이가 모두 같지 않거나, L개가 연속되지 않은 경우
+                            return false;
+                        }
+                        if (c[i+j]) {
+                        // 경사로를 놓은 곳에 또 경사로를 놓는 경우
+                            return false;
+                        }
+                        c[i+j] = true;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = 4;
-        char[][] a = new char[4][8];
+        int n = sc.nextInt();
+        int l = sc.nextInt();
+        int[][] a = new int[n][n];
         for (int i=0; i<n; i++) {
-            a[i] = sc.next().toCharArray();
-        }
-        int k = sc.nextInt();
-        while (k-- > 0) {
-            int no = sc.nextInt()-1;
-            int dir = sc.nextInt();
-            // 각각의 톱니는 동시에 회전해야 하기 때문에
-            // 먼저, 각 톱니가 어떤 방향으로 회전해야 하는지 구하자
-            int[] d = new int[n];
-            d[no] = dir;
-            // 왼쪽 톱니를 연쇄적으로 구하고
-            for (int i=no-1; i>=0; i--) {
-                if (a[i][2] != a[i+1][6]) {
-                    d[i] = -d[i+1];
-                } else {
-                    // 한 톱니가 회전하지 않으면
-                    // 그 톱니의 왼쪽에 있는 톱니도 회전하지 않는다.
-                    break;
-                }
-            }
-            // 오른쪽 톱니를 연쇄적으로 구하고
-            for (int i=no+1; i<n; i++) {
-                if (a[i-1][2] != a[i][6]) {
-                    d[i] = -d[i-1];
-                } else {
-                    // 한 톱니가 회전하지 않으면
-                    // 그 톱니의 오른쪽에 있는 톱니도 회전하지 않는다.
-                    break;
-                }
-            }
-            for (int i=0; i<n; i++) {
-                if (d[i] == 0) continue;
-                if (d[i] == 1) {
-                    // 시계 방향 회전
-                    char temp = a[i][7];
-                    for (int j=7; j>=1; j--) {
-                        a[i][j] = a[i][j-1];
-                    }
-                    a[i][0] = temp;
-                } else if (d[i] == -1) {
-                    // 반시계 방향 회전
-                    char temp = a[i][0];
-                    for (int j=0; j<7; j++) {
-                        a[i][j] = a[i][j+1];
-                    }
-                    a[i][7] = temp;
-                }
+            for (int j=0; j<n; j++) {
+                a[i][j] = sc.nextInt();
             }
         }
         int ans = 0;
         for (int i=0; i<n; i++) {
-            if (a[i][0] == '1') {
-                ans |= (1 << i);
+            // 행 검사
+            int[] d = new int[n];
+            for (int j=0; j<n; j++) {
+                d[j] = a[i][j];
             }
+            if (go(d, l)) ans += 1;
+        }
+        for (int j=0; j<n; j++) {
+            // 열 검사
+            int[] d = new int[n];
+            for (int i=0; i<n; i++) {
+                d[i] = a[i][j];
+            }
+            if (go(d, l)) ans += 1;
         }
         System.out.println(ans);
     }
