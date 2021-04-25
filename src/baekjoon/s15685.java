@@ -26,7 +26,7 @@ public class s15685 {
                 c[x][y] = true;
             }
         }
-        
+
         int ans = 0;
         for (int i=0; i<=99; i++) {
             for (int j=0; j<=99; j++) {
