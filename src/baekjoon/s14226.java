@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-class Node{
+class Node1{
     int len;
     int buf;
     int cnt;
-    public Node(int l, int b, int c) {
+    public Node1(int l, int b, int c) {
         this.len=l;
         this.buf=b;
         this.cnt=c;
@@ -20,25 +20,25 @@ public class s14226 {
     static boolean[][] visit;
 
     public static int bfs() {
-        Queue<Node> q=new LinkedList<>();
+        Queue<Node1> q=new LinkedList<>();
         visit[1][0]=true;
-        q.offer(new Node(1, 0, 0));
+        q.offer(new Node1(1, 0, 0));
 
         while(!q.isEmpty()) {
-            Node node=q.poll();
+            Node1 node=q.poll();
             if(node.len==s) return node.cnt;
 
             if(!visit[node.len][node.len]) {//복사
                 visit[node.len][node.len]=true;
-                q.offer(new Node(node.len, node.len, node.cnt+1));
+                q.offer(new Node1(node.len, node.len, node.cnt+1));
             }
             if(node.buf!=0 && !visit[node.len+node.buf][node.buf] && node.len+node.buf<=1000) {//붙여넣기
                 visit[node.len+node.buf][node.buf]=true;
-                q.offer(new Node(node.len+node.buf, node.buf, node.cnt+1));
+                q.offer(new Node1(node.len+node.buf, node.buf, node.cnt+1));
             }
             if(node.len>0 && !visit[node.len-1][node.buf]) {
                 visit[node.len-1][node.buf]=true;
-                q.offer(new Node(node.len-1, node.buf, node.cnt+1));
+                q.offer(new Node1(node.len-1, node.buf, node.cnt+1));
             }
         }
         return -1;
